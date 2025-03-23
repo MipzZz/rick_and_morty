@@ -33,4 +33,3 @@ class CardsView extends StatelessWidget {
     );
   }
 }
-
