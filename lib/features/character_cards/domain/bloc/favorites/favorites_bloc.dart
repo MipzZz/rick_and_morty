@@ -12,34 +12,48 @@ part 'favorites_state.dart';
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({required ICharacterCardsRepository characterCardsRepository})
       : _characterCardsRepository = characterCardsRepository,
-        super(FavoritesState$Processing(null)) {
-    on<FavoritesEvent>((event, emitter) =>
-    switch (event) {
-      FavoritesEvent$Load() => _load(event, emitter),
-      FavoritesEvent$SaveToFavorites() => _saveToFavorites(event, emitter),
-    });
+        super(FavoritesState$Processing(favoritesCharacters: null)) {
+    on<FavoritesEvent>((event, emitter) => switch (event) {
+          FavoritesEvent$Load() => _load(event, emitter),
+          FavoritesEvent$SaveToFavorites() => _saveToFavorites(event, emitter),
+          FavoritesEvent$RemoveFromFavorites() => _removeFromFavorites(event, emitter)
+        });
   }
 
   final ICharacterCardsRepository _characterCardsRepository;
 
   Future<void> _load(FavoritesEvent$Load event, Emitter<FavoritesState> emitter) async {
-    emitter(FavoritesState$Processing(state.favoritesCharacters));
+    emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
     try {
       final favoritesCards = await _characterCardsRepository.getFavorites();
-      emitter(FavoritesState$Idle(UnmodifiableListView(favoritesCards)));
+      emitter(FavoritesState$Idle(favoritesCharacters: UnmodifiableListView(favoritesCards)));
     } on Object catch (e, s) {
-      emitter(FavoritesState$Error(state.favoritesCharacters, error: e));
+      emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));
       onError(e, s);
     }
   }
 
   Future<void> _saveToFavorites(FavoritesEvent$SaveToFavorites event, Emitter<FavoritesState> emitter) async {
-    emitter(FavoritesState$Processing(state.favoritesCharacters));
+    emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
     try {
       await _characterCardsRepository.saveToFavorites(event.characterCard);
-      emitter(FavoritesState$Idle(state.favoritesCharacters));
+      final updatedFavorites = UnmodifiableListView([...state.favoritesCharacters!, event.characterCard]);
+      emitter(FavoritesState$Idle(favoritesCharacters: updatedFavorites));
     } on Object catch (e, s) {
-      emitter(FavoritesState$Error(state.favoritesCharacters, error: e));
+      emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));
+      onError(e, s);
+    }
+  }
+
+  Future<void> _removeFromFavorites(FavoritesEvent$RemoveFromFavorites event, Emitter<FavoritesState> emitter) async {
+    emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
+    try {
+      await _characterCardsRepository.removeFromFavorites(event.characterCard);
+      final updatedFavorites =
+          state.favoritesCharacters!.where((element) => element.id != event.characterCard.id).toList();
+      emitter(FavoritesState$Idle(favoritesCharacters: UnmodifiableListView(updatedFavorites)));
+    } on Object catch (e, s) {
+      emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));
       onError(e, s);
     }
   }

@@ -17,10 +17,17 @@ final class DriftClientImpl implements DriftClient {
       (_) => favorite,
     );
   }
+
+  @override
+  Future<void> removeFromFavorites(Favorites favorite) async {
+    await _managers.favoriteTable.filter((f) => f.id.equals(favorite.id)).delete();
+  }
 }
 
 abstract interface class DriftClient {
   Future<List<Favorites>> getFavoritesCards();
 
   Future<void> saveToFavorites(Favorites favorite);
+
+  Future<void> removeFromFavorites(Favorites favorite);
 }

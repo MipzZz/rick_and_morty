@@ -31,4 +31,9 @@ final class CharacterCardsRepository implements ICharacterCardsRepository {
   Future<void> saveToFavorites(CharacterCard characterCard) async {
     await _characterLocalDatasource.saveToFavorites(characterCard);
   }
+
+  @override
+  Future<void> removeFromFavorites(CharacterCard characterCard) async{
+    await _characterLocalDatasource.removeFromFavorites(characterCard);
+  }
 }

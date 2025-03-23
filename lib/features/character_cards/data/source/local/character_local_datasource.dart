@@ -15,4 +15,8 @@ final class CharacterLocalDatasource {
   Future<void> saveToFavorites(CharacterCard characterCard) async{
     await driftClient.saveToFavorites(characterCard.toFavorites());
   }
+
+  Future<void> removeFromFavorites(CharacterCard characterCard) async{
+    await driftClient.removeFromFavorites(characterCard.toFavorites());
+  }
 }

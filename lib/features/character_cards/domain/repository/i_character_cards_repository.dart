@@ -4,4 +4,6 @@ abstract interface class ICharacterCardsRepository {
   Future<Iterable<CharacterCard>> getCharacterCards();
   Future<Iterable<CharacterCard>> getFavorites();
   Future<void> saveToFavorites(CharacterCard characterCard);
+  Future<void> removeFromFavorites(CharacterCard characterCard);
+
 }

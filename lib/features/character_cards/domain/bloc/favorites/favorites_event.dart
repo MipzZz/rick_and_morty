@@ -7,4 +7,10 @@ final class FavoritesEvent$Load extends FavoritesEvent {}
 final class FavoritesEvent$SaveToFavorites extends FavoritesEvent {
   final CharacterCard characterCard;
   FavoritesEvent$SaveToFavorites(this.characterCard);
+
+}
+final class FavoritesEvent$RemoveFromFavorites extends FavoritesEvent {
+  final CharacterCard characterCard;
+  FavoritesEvent$RemoveFromFavorites(this.characterCard);
+
 }
