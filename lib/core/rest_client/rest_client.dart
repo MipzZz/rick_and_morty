@@ -4,7 +4,6 @@ import 'package:rick_and_morty/core/utils/typdef.dart';
 /// A REST client for making HTTP requests.
 /// {@endtemplate}
 abstract interface class RestClient {
-
   /// Sends a request to the server
   Future<JsonMap?> send({
     required String path,

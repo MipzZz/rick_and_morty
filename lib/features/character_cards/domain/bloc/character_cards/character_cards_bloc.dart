@@ -12,10 +12,7 @@ class CharacterCardsBloc extends Bloc<CharacterCardsEvent, CharacterCardsState> 
   CharacterCardsBloc({required ICharacterCardsRepository characterCardsRepository})
       : _characterCardsRepository = characterCardsRepository,
         super(CharacterCards$Processing(null)) {
-    on<CharacterCardsEvent>((event, emitter) =>
-    switch(event) {
-      CharacterCardsEvent$Load() => _load(event, emitter)
-    });
+    on<CharacterCardsEvent>((event, emitter) => switch (event) { CharacterCardsEvent$Load() => _load(event, emitter) });
   }
 
   final ICharacterCardsRepository _characterCardsRepository;

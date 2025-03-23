@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/core/common/url.dart';
+import 'package:rick_and_morty/core/drift/database/app_drift_database.dart';
+import 'package:rick_and_morty/core/drift/drift_client.dart';
 import 'package:rick_and_morty/core/rest_client/app_dio_configurator.dart';
 import 'package:rick_and_morty/core/rest_client/rest_client.dart';
 import 'package:rick_and_morty/core/rest_client/rest_client_dio.dart';
 import 'package:rick_and_morty/features/app/model/app_theme.dart';
 import 'package:rick_and_morty/features/character_cards/data/repository/character_cards_repository.dart';
+import 'package:rick_and_morty/features/character_cards/data/source/local/character_local_datasource.dart';
 import 'package:rick_and_morty/features/character_cards/data/source/network/character_datasource.dart';
 import 'package:rick_and_morty/features/character_cards/domain/repository/i_character_cards_repository.dart';
 import 'package:rick_and_morty/features/init/model/dependencies_container.dart';
@@ -45,11 +48,16 @@ Future<DependenciesContainer> createDependenciesContainer() async {
   final sharedPreferences = SharedPreferencesAsync();
   final appSettingsBloc = await createSettingsBloc(sharedPreferences);
   final restClient = await createRestClient();
-  final characterCardsRepository = await createCharacterCardsRepository(restClient);
+  final driftClient = await createDriftClient();
+  final characterCardsRepository = await createCharacterCardsRepository(
+    restClient: restClient,
+    driftClient: driftClient,
+  );
 
   return DependenciesContainer(
     settingsBloc: appSettingsBloc,
     restClient: restClient,
+    driftClient: driftClient,
     characterCardsRepository: characterCardsRepository,
   );
 }
@@ -75,8 +83,19 @@ Future<RestClient> createRestClient() async {
   return RestClientDio(dio: dioClient);
 }
 
-Future<ICharacterCardsRepository> createCharacterCardsRepository(RestClient restClient) async {
-  final characterDatasource = CharacterDatasource(restClient);
+Future<IDriftClient> createDriftClient() async {
+  final driftDatabase = AppDriftDatabase();
+  final managers = driftDatabase.managers;
+  return DriftClient(managers: managers);
+}
 
-  return CharacterCardsRepository(characterDatasource);
+Future<ICharacterCardsRepository> createCharacterCardsRepository(
+    {required RestClient restClient, required IDriftClient driftClient}) async {
+  final characterDatasource = CharacterDatasource(restClient);
+  final characterLocalDatasource = CharacterLocalDatasource(driftClient);
+
+  return CharacterCardsRepository(
+    characterDatasource: characterDatasource,
+    characterLocalDatasource: characterLocalDatasource,
+  );
 }

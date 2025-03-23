@@ -6,6 +6,7 @@ abstract class AppThemeData {
     colorScheme: const ColorScheme.light(
       primary: Colors.orange,
     ),
+    pageTransitionsTheme: _pageTransitionsTheme,
   );
 
   static final darkTheme = ThemeData(
@@ -13,5 +14,12 @@ abstract class AppThemeData {
     colorScheme: const ColorScheme.dark(
       primary: Colors.deepOrange,
     ),
+    pageTransitionsTheme: _pageTransitionsTheme,
   );
+
+  static final _pageTransitionsTheme = const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
+    TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+  });
 }
