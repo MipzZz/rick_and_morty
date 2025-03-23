@@ -22,13 +22,12 @@ class CharacterCard {
 
   factory CharacterCard.fromFavorites(Favorites favorite) {
     return CharacterCard(
-      id: favorite.id,
-      name: favorite.name,
-      status: favorite.status,
-      type: favorite.type,
-      gender: favorite.gender,
-      image: favorite.image
-    );
+        id: favorite.id,
+        name: favorite.name,
+        status: favorite.status,
+        type: favorite.type,
+        gender: favorite.gender,
+        image: favorite.image);
   }
 
   Favorites toFavorites() => Favorites(id: id, name: name, status: status, type: type, gender: gender, image: image);
@@ -44,14 +43,8 @@ class CharacterCard {
     );
   }
 
-  JsonMap toJson() => <String, dynamic>{
-        'id': id,
-        'name': name,
-        'status': status,
-        'type': type,
-        'gender': gender,
-        'image': image,
-  };
+  JsonMap toJson() =>
+      <String, dynamic>{'id': id, 'name': name, 'status': status, 'type': type, 'gender': gender, 'image': image};
 
   @override
   bool operator ==(Object other) =>

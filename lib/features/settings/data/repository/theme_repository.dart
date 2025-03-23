@@ -13,5 +13,7 @@ final class ThemeRepository implements IThemeRepository {
   Future<AppTheme?> getTheme() => _themeDataSource.getTheme();
 
   @override
-  Future<void> setTheme(AppTheme theme) => _themeDataSource.setTheme(theme);
+  Future<void> setTheme(AppTheme theme) {
+    return _themeDataSource.setTheme(theme);
+  }
 }

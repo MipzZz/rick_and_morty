@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_and_morty/features/app/model/app_theme.dart';
 import 'package:rick_and_morty/features/navigation/utils/app_route_paths.dart';
 import 'package:rick_and_morty/features/settings/domain/bloc/settings_bloc.dart';
 import 'package:rick_and_morty/features/navigation/router.dart' as router;
@@ -34,8 +33,9 @@ class _TempViewState extends State<TempView> {
     _navigatorKey.currentState!.pushReplacementNamed(_tabs[index]);
   }
 
-  void changeTheme() {
-    context.read<SettingsBloc>().add(SettingsEvent$UpdateTheme(AppTheme.defaultTheme));
+  void changeTheme(BuildContext context) {
+    final themeMode = context.read<SettingsBloc>().state.appTheme.mode;
+    context.read<SettingsBloc>().add(SettingsEvent$UpdateThemeMode(themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light));
   }
 
   @override
@@ -45,7 +45,7 @@ class _TempViewState extends State<TempView> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Rick and Morty'),
         actions: [
-          IconButton(onPressed: changeTheme, icon: const Icon(Icons.dark_mode)),
+          IconButton(onPressed: () => changeTheme(context), icon: const Icon(Icons.dark_mode)),
         ],
       ),
       body: Navigator(

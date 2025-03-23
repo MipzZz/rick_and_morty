@@ -1,7 +1,7 @@
 import 'package:rick_and_morty/core/drift/database/app_drift_database.dart';
 
-final class DriftClient implements IDriftClient {
-  DriftClient({required $AppDriftDatabaseManager managers}) : _managers = managers;
+final class DriftClientImpl implements DriftClient {
+  DriftClientImpl({required $AppDriftDatabaseManager managers}) : _managers = managers;
 
   final $AppDriftDatabaseManager _managers;
 
@@ -19,7 +19,7 @@ final class DriftClient implements IDriftClient {
   }
 }
 
-abstract interface class IDriftClient {
+abstract interface class DriftClient {
   Future<List<Favorites>> getFavoritesCards();
 
   Future<void> saveToFavorites(Favorites favorite);

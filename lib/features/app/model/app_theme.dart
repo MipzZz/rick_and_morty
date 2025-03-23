@@ -27,7 +27,7 @@ final class AppTheme with Diagnosticable {
 
   /// The [ThemeData] for this [AppTheme].
   /// This is computed based on the [mode].
-  ThemeData computeTheme() {
+  ThemeData computeTheme(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.light:
         return lightTheme;
@@ -37,6 +37,8 @@ final class AppTheme with Diagnosticable {
         return PlatformDispatcher.instance.platformBrightness == Brightness.dark ? darkTheme : lightTheme;
     }
   }
+
+  AppTheme copyWith({ThemeMode? mode}) => AppTheme(mode: mode ?? this.mode);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

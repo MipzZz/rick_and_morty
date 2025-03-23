@@ -3,8 +3,8 @@ part of 'settings_bloc.dart';
 @immutable
 sealed class SettingsEvent {}
 
-final class SettingsEvent$UpdateTheme extends SettingsEvent {
-  final AppTheme theme;
+final class SettingsEvent$UpdateThemeMode extends SettingsEvent {
+  final ThemeMode themeMode;
 
-  SettingsEvent$UpdateTheme(this.theme);
+  SettingsEvent$UpdateThemeMode(this.themeMode);
 }

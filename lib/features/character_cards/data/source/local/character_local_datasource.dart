@@ -4,7 +4,7 @@ import 'package:rick_and_morty/features/character_cards/domain/model/character_c
 final class CharacterLocalDatasource {
   CharacterLocalDatasource(this.driftClient);
 
-  final IDriftClient driftClient;
+  final DriftClient driftClient;
 
   Future<Iterable<CharacterCard>> getFavoritesCards() async{
     final res = await driftClient.getFavoritesCards();

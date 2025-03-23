@@ -71,7 +71,7 @@ Future<SettingsBloc> createSettingsBloc(SharedPreferencesAsync sharedPreferences
       ThemeRepository(themeDataSource: ThemeDataSourceLocal(sharedPreferences: sharedPreferences, codec: themeCodec));
 
   final appTheme = await themeRepository.getTheme();
-  final initialState = SettingsState$Idle(appTheme ?? AppTheme(mode: ThemeMode.light));
+  final initialState = SettingsState$Idle(appTheme: appTheme ?? AppTheme(mode: ThemeMode.light));
 
   return SettingsBloc(themeRepository: themeRepository, initialState: initialState);
 }
@@ -83,14 +83,14 @@ Future<RestClient> createRestClient() async {
   return RestClientDio(dio: dioClient);
 }
 
-Future<IDriftClient> createDriftClient() async {
+Future<DriftClient> createDriftClient() async {
   final driftDatabase = AppDriftDatabase();
   final managers = driftDatabase.managers;
-  return DriftClient(managers: managers);
+  return DriftClientImpl(managers: managers);
 }
 
 Future<ICharacterCardsRepository> createCharacterCardsRepository(
-    {required RestClient restClient, required IDriftClient driftClient}) async {
+    {required RestClient restClient, required DriftClient driftClient}) async {
   final characterDatasource = CharacterDatasource(restClient);
   final characterLocalDatasource = CharacterLocalDatasource(driftClient);
 
