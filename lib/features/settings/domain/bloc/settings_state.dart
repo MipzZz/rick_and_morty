@@ -10,13 +10,10 @@ sealed class SettingsState {
 }
 
 final class SettingsState$Idle extends SettingsState {
-
-
   const SettingsState$Idle(super.appTheme);
 }
 
 final class SettingsState$Processing extends SettingsState {
-
   const SettingsState$Processing(super.appTheme);
 }
 

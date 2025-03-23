@@ -15,11 +15,11 @@ class DependenciesScope extends InheritedWidget {
   /// Get the dependencies from the [context].
   static DependenciesContainer of(BuildContext context) =>
       context.getInheritedWidgetOfExactType<DependenciesScope>()?.dependencies ??
-          (throw ArgumentError(
-            'Out of scope, not found inherited widget '
-                'a $DependenciesContainer of the exact type',
-            'out_of_scope',
-          ));
+      (throw ArgumentError(
+        'Out of scope, not found inherited widget '
+            'a $DependenciesContainer of the exact type',
+        'out_of_scope',
+      ));
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

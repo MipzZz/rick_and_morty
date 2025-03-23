@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:rick_and_morty/core/drift/database/app_drift_database.dart';
+import 'package:rick_and_morty/core/utils/typdef.dart';
 
 @immutable
 class CharacterCard {
@@ -18,7 +20,20 @@ class CharacterCard {
     required this.image,
   });
 
-  factory CharacterCard.fromJson(Map<String, dynamic> json) {
+  factory CharacterCard.fromFavorites(Favorites favorite) {
+    return CharacterCard(
+      id: favorite.id,
+      name: favorite.name,
+      status: favorite.status,
+      type: favorite.type,
+      gender: favorite.gender,
+      image: favorite.image
+    );
+  }
+
+  Favorites toFavorites() => Favorites(id: id, name: name, status: status, type: type, gender: gender, image: image);
+
+  factory CharacterCard.fromJson(JsonMap json) {
     return CharacterCard(
       id: json['id'] as int,
       name: json['name'] as String,
@@ -28,6 +43,15 @@ class CharacterCard {
       image: json['image'] as String,
     );
   }
+
+  JsonMap toJson() => <String, dynamic>{
+        'id': id,
+        'name': name,
+        'status': status,
+        'type': type,
+        'gender': gender,
+        'image': image,
+  };
 
   @override
   bool operator ==(Object other) =>

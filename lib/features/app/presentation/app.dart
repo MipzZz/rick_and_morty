@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/features/app/model/app_theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_and_morty/features/character_cards/domain/bloc/character_cards_bloc.dart';
-import 'package:rick_and_morty/features/character_cards/presentation/view/cards_view.dart';
+import 'package:rick_and_morty/features/character_cards/domain/bloc/character_cards/character_cards_bloc.dart';
+import 'package:rick_and_morty/features/character_cards/domain/bloc/favorites/favorites_bloc.dart';
 import 'package:rick_and_morty/features/init/logic/dependencies_scope.dart';
 import 'package:rick_and_morty/features/init/model/dependencies_container.dart';
+import 'package:rick_and_morty/features/navigation/utils/app_route_paths.dart';
 import 'package:rick_and_morty/features/settings/domain/bloc/settings_bloc.dart';
+import 'package:rick_and_morty/features/navigation/router.dart' as router;
 
 /// {@template App.class}
 /// App widget.
@@ -28,7 +30,10 @@ class App extends StatelessWidget {
               return CharacterCardsBloc(characterCardsRepository: dependencies.characterCardsRepository)
                 ..add(CharacterCardsEvent$Load());
             },
-          )
+          ),
+          BlocProvider(
+              create: (context) => FavoritesBloc(characterCardsRepository: dependencies.characterCardsRepository)
+                ..add(FavoritesEvent$Load())),
         ],
         child: Builder(builder: (context) {
           final appTheme = context.select<SettingsBloc, AppTheme>((bloc) => bloc.state.appTheme);
@@ -36,9 +41,8 @@ class App extends StatelessWidget {
               theme: appTheme.lightTheme,
               darkTheme: appTheme.darkTheme,
               themeMode: appTheme.mode,
-              home: CardsView(),
-              // TODO(MipZ): Add routes
-              // routes: ,
+              initialRoute: AppRoutePaths.home,
+              onGenerateRoute: router.generateRoute,
               builder: (context, child) => child!);
         }),
       ),

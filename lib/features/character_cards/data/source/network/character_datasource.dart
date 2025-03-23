@@ -7,7 +7,7 @@ final class CharacterDatasource {
 
   final RestClient _restClient;
 
-  Future<Iterable<CharacterCard>> getCharacterCards() async{
+  Future<Iterable<CharacterCard>> getCharacterCards() async {
     final res = await _restClient.get('/character');
     if (res == null) return [];
 

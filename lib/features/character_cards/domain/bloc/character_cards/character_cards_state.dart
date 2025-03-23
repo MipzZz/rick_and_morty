@@ -12,9 +12,11 @@ sealed class CharacterCardsState {
 final class CharacterCards$Idle extends CharacterCardsState {
   const CharacterCards$Idle(super.characterCards);
 }
+
 final class CharacterCards$Processing extends CharacterCardsState {
   const CharacterCards$Processing(super.characterCards);
 }
+
 final class CharacterCards$Error extends CharacterCardsState {
   final Object error;
   const CharacterCards$Error(super.characterCards, {required this.error});
