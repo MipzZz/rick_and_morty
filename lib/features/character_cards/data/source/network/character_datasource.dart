@@ -1,0 +1,18 @@
+import 'package:rick_and_morty/core/rest_client/rest_client.dart';
+import 'package:rick_and_morty/core/utils/typdef.dart';
+import 'package:rick_and_morty/features/character_cards/domain/model/character_card.dart';
+
+final class CharacterDatasource {
+  CharacterDatasource(this._restClient);
+
+  final RestClient _restClient;
+
+  Future<Iterable<CharacterCard>> getCharacterCards() async{
+    final res = await _restClient.get('/character');
+    if (res == null) return [];
+
+    final itemsMap = (res['results'] as List<dynamic>? ?? []).cast<JsonMap>();
+
+    return itemsMap.map((jsonCharacter) => CharacterCard.fromJson(jsonCharacter));
+  }
+}

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty/core/common/url.dart';
+import 'package:rick_and_morty/core/rest_client/app_dio_configurator.dart';
+import 'package:rick_and_morty/core/rest_client/rest_client.dart';
+import 'package:rick_and_morty/core/rest_client/rest_client_dio.dart';
 import 'package:rick_and_morty/features/app/model/app_theme.dart';
+import 'package:rick_and_morty/features/character_cards/data/repository/character_cards_repository.dart';
+import 'package:rick_and_morty/features/character_cards/data/source/network/character_datasource.dart';
+import 'package:rick_and_morty/features/character_cards/domain/repository/i_character_cards_repository.dart';
 import 'package:rick_and_morty/features/init/model/dependencies_container.dart';
 import 'package:rick_and_morty/features/settings/data/repository/theme_repository.dart';
 import 'package:rick_and_morty/features/settings/data/source/theme_datasource.dart';
@@ -37,8 +44,14 @@ final class CompositionResult {
 Future<DependenciesContainer> createDependenciesContainer() async {
   final sharedPreferences = SharedPreferencesAsync();
   final appSettingsBloc = await createSettingsBloc(sharedPreferences);
+  final restClient = await createRestClient();
+  final characterCardsRepository = await createCharacterCardsRepository(restClient);
 
-  return DependenciesContainer(settingsBloc: appSettingsBloc);
+  return DependenciesContainer(
+    settingsBloc: appSettingsBloc,
+    restClient: restClient,
+    characterCardsRepository: characterCardsRepository,
+  );
 }
 
 /// Creates an instance of [AppSettingsBloc].
@@ -53,4 +66,17 @@ Future<SettingsBloc> createSettingsBloc(SharedPreferencesAsync sharedPreferences
   final initialState = SettingsState$Idle(appTheme ?? AppTheme(mode: ThemeMode.light));
 
   return SettingsBloc(themeRepository: themeRepository, initialState: initialState);
+}
+
+Future<RestClient> createRestClient() async {
+  final dioConfigurator = AppDioConfigurator();
+  final dioClient = dioConfigurator.create(url: Url.baseUrl);
+
+  return RestClientDio(dio: dioClient);
+}
+
+Future<ICharacterCardsRepository> createCharacterCardsRepository(RestClient restClient) async {
+  final characterDatasource = CharacterDatasource(restClient);
+
+  return CharacterCardsRepository(characterDatasource);
 }
