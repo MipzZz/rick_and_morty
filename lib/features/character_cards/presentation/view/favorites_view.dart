@@ -28,6 +28,7 @@ class FavoritesView extends StatelessWidget {
           builder: (context, state) => switch (state) {
             FavoritesState$Processing() => Center(child: CircularProgressIndicator()),
             FavoritesState$Error(:final error) => Center(child: Text(error.toString())),
+            FavoritesState$Idle(:final favoritesCharacters) when favoritesCharacters?.isEmpty ?? false => const Center(child: Text('You have no favorite cards')),
             FavoritesState$Idle(:final favoritesCharacters) => _FavoriteList(favoritesCharacters: favoritesCharacters),
           },
         ),

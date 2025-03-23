@@ -20,12 +20,15 @@ class CardsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => _loadCards(context),
-      child: BlocBuilder<CharacterCardsBloc, CharacterCardsState>(
-        builder: (context, state) => switch (state) {
-          CharacterCards$Processing() => Center(child: CircularProgressIndicator()),
-          CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
-          CharacterCards$Idle(:final characterCards) => CardsGrid(characterCards: characterCards),
-        },
+      child: ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: BlocBuilder<CharacterCardsBloc, CharacterCardsState>(
+          builder: (context, state) => switch (state) {
+            CharacterCards$Processing() => Center(child: CircularProgressIndicator()),
+            CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
+            CharacterCards$Idle(:final characterCards) => CardsGrid(characterCards: characterCards),
+          },
+        ),
       ),
     );
   }

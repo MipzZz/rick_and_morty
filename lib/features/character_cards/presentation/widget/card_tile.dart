@@ -42,37 +42,25 @@ class CardTile extends StatelessWidget {
                   builder: (context, isFavorite) {
                     return IconButton(
                       onPressed: () => _addToFavorites(context, isFavorite),
-                      icon: isFavorite ? const Icon(Icons.favorite, color: Colors.red) : const Icon(Icons.favorite),
+                      icon: isFavorite ? const Icon(Icons.favorite, color: Colors.red) : const Icon(Icons.favorite, color: Colors.white,),
                     );
                   },
                 ),
               ),
             ],
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage(Images.cardBackground), fit: BoxFit.fill),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    characterCard.name,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-                  ),
-                  // ),
-                  // Text(
-                  //   characterCard.gender,
-                  //   style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-                  // ),
-                  // Text(
-                  //   characterCard.type,
-                  //   style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-                  // ),
-                ],
+          Expanded(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage(Images.cardBackground), fit: BoxFit.fill),
+              ),
+              child: Center(
+                child: Text(
+                  characterCard.name,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                ),
               ),
             ),
           ),
