@@ -19,12 +19,15 @@ class CharacterCardsBloc extends Bloc<CharacterCardsEvent, CharacterCardsState> 
   final ICharacterCardsRepository _characterCardsRepository;
 
   Future<void> _load(CharacterCardsEvent$Load event, Emitter<CharacterCardsState> emitter) async {
-    emitter(CharacterCards$Processing(characterCards:  state.characterCards));
+    emitter(CharacterCards$Processing(offset: state.offset, characterCards: event.offset == null ? state.characterCards : null));
     try {
-      final characterCards = await _characterCardsRepository.getCharacterCards(filters: event.filters);
-      emitter(CharacterCards$Idle(characterCards: UnmodifiableListView(characterCards)));
+      final characterCardsChunk =
+          await _characterCardsRepository.getCharacterCards(offset: event.offset ?? state.offset, filters: event.filters);
+      final UnmodifiableListView<CharacterCard> newCardsList = UnmodifiableListView([...(state.characterCards ?? []), ...characterCardsChunk]);//.distinct().toList();
+      // // TODO(MipZ): Возвращать новый офсет с апи
+      emitter(CharacterCards$Idle(characterCards: newCardsList, offset: (state.offset ?? 1) + 1));
     } on Object catch (e, s) {
-      emitter(CharacterCards$Error(characterCards:  state.characterCards, error: e));
+      emitter(CharacterCards$Error(characterCards: state.characterCards, error: e));
       onError(e, s);
     }
   }

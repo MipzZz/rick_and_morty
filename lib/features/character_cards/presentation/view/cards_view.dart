@@ -12,9 +12,10 @@ class CardsView extends StatelessWidget {
   /// {@macro CardsView.class}
   const CardsView({super.key});
 
-  Future<void> _loadCards(BuildContext context) async {
+  Future<void> _loadCards(BuildContext context, [bool isFilterChanges = false]) async {
     final filters = context.read<FiltersBloc>().state.filters;
-    final characterCardsBloc = context.read<CharacterCardsBloc>()..add(CharacterCardsEvent$Load(filters: filters));
+    final characterCardsBloc = context.read<CharacterCardsBloc>()
+      ..add(CharacterCardsEvent$Load(offset: isFilterChanges ? 1 : null, filters: filters));
     await characterCardsBloc.stream.first;
   }
 
@@ -22,42 +23,48 @@ class CardsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FiltersBloc(),
-      child: Builder(
-        builder: (context) {
-          return RefreshIndicator(
-            onRefresh: () => _loadCards(context),
-            child: ColoredBox(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    FiltersPanel(),
-                    Expanded(
-                      child: BlocBuilder<CharacterCardsBloc, CharacterCardsState>(
-                        builder: (context, state) => switch (state) {
-                          CharacterCards$Processing() => Center(child: CircularProgressIndicator()),
-                          CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
-                          CharacterCards$Idle(:final characterCards) => BlocConsumer<FiltersBloc, FiltersState>(
-                             listener: (_,__) => _loadCards(context),
-                              builder: (context, filtersState) {
-                                return SliverCardsGrid(
+      child: Builder(builder: (context) {
+        return RefreshIndicator(
+          onRefresh: () => _loadCards(context),
+          child: ColoredBox(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  FiltersPanel(),
+                  Expanded(
+                    child: BlocBuilder<CharacterCardsBloc, CharacterCardsState>(
+                      builder: (context, state) => switch (state) {
+                        CharacterCards$Processing(:final characterCards) when (characterCards?.isEmpty ?? true) =>
+                          Center(child: CircularProgressIndicator()),
+                        CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
+                        _ => BlocConsumer<FiltersBloc, FiltersState>(
+                            listener: (_, __) => _loadCards(context, true),
+                            builder: (context, filtersState) {
+                              return NotificationListener<ScrollNotification>(
+                                onNotification: (notification) {
+                                  if (notification is ScrollEndNotification && notification.metrics.extentAfter == 0) {
+                                    _loadCards(context);
+                                  }
+                                  return false;
+                                },
+                                child: SliverCardsGrid(
                                   filters: filtersState.filters,
-                                  characterCards: characterCards,
-                                );
-                              },
-                            ),
-                        },
-                      ),
+                                  characterCards: state.characterCards,
+                                ),
+                              );
+                            },
+                          ),
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
-

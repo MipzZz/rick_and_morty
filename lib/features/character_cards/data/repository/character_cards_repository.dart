@@ -15,8 +15,11 @@ final class CharacterCardsRepository implements ICharacterCardsRepository {
   final CharacterLocalDatasource _characterLocalDatasource;
 
   @override
-  Future<Iterable<CharacterCard>> getCharacterCards({required Iterable<FilterEnum> filters}) async {
-    final characterCards = await _characterDatasource.getCharacterCards(filters: filters);
+  Future<Iterable<CharacterCard>> getCharacterCards({
+    required int? offset,
+    required Iterable<FilterEnum> filters,
+  }) async {
+    final characterCards = await _characterDatasource.getCharacterCards(offset: offset, filters: filters);
 
     return characterCards;
   }
@@ -34,7 +37,7 @@ final class CharacterCardsRepository implements ICharacterCardsRepository {
   }
 
   @override
-  Future<void> removeFromFavorites(CharacterCard characterCard) async{
+  Future<void> removeFromFavorites(CharacterCard characterCard) async {
     await _characterLocalDatasource.removeFromFavorites(characterCard);
   }
 }
