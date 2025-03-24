@@ -26,7 +26,8 @@ class CardsView extends StatelessWidget {
           builder: (context, state) => switch (state) {
             CharacterCards$Processing() => Center(child: CircularProgressIndicator()),
             CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
-            CharacterCards$Idle(:final characterCards) => CardsGrid(characterCards: characterCards),
+            CharacterCards$Idle(:final characterCards) when characterCards?.isEmpty ?? false => Text('Карточки персонажей не найдены'),
+            CharacterCards$Idle(:final characterCards)  => CardsGrid(characterCards: characterCards),
           },
         ),
       ),
