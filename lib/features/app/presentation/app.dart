@@ -33,7 +33,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
               create: (context) => FavoritesBloc(characterCardsRepository: dependencies.characterCardsRepository)
-                ..add(FavoritesEvent$Load())),
+                ..add(FavoritesEvent$Load(filters: []))),
         ],
         child: Builder(builder: (context) {
           final appTheme = context.select<SettingsBloc, AppTheme>((bloc) => bloc.state.appTheme);

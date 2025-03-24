@@ -85,8 +85,7 @@ Future<RestClient> createRestClient() async {
 
 Future<DriftClient> createDriftClient() async {
   final driftDatabase = AppDriftDatabase();
-  final managers = driftDatabase.managers;
-  return DriftClientImpl(managers: managers);
+  return DriftClientImpl(database: driftDatabase);
 }
 
 Future<ICharacterCardsRepository> createCharacterCardsRepository(

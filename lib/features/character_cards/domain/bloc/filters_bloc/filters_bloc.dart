@@ -15,6 +15,13 @@ class FiltersBloc extends Bloc<FiltersEvent, FiltersState> {
     );
   }
 
-  void _changeFilters(FiltersEvent$Change event, Emitter<FiltersState> emitter) =>
-      emitter(FiltersState$Idle(filters: event.filters));
+  void _changeFilters(FiltersEvent$Change event, Emitter<FiltersState> emitter) {
+    final oldList = state.filters;
+    if (event.isSelected) {
+      return emitter(FiltersState$Idle(filters: [...oldList, event.filter]));
+    }
+    oldList.remove(event.filter);
+    final List<FilterEnum> newList = List.from(oldList);
+    emitter(FiltersState$Idle(filters: newList));
+  }
 }

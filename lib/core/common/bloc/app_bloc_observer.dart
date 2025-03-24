@@ -36,7 +36,8 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase<Object?> bloc, Object error, StackTrace stackTrace) {
     final logMessage = StringBuffer()
       ..writeln('Bloc: ${bloc.runtimeType}')
-      ..writeln(error.toString());
+      ..writeln(error.toString())
+    ..writeln(stackTrace.toString());
 
     debugPrint(logMessage.toString());
     super.onError(bloc, error, stackTrace);

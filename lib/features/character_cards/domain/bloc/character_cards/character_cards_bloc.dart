@@ -12,19 +12,19 @@ part 'character_cards_state.dart';
 class CharacterCardsBloc extends Bloc<CharacterCardsEvent, CharacterCardsState> {
   CharacterCardsBloc({required ICharacterCardsRepository characterCardsRepository})
       : _characterCardsRepository = characterCardsRepository,
-        super(CharacterCards$Processing(null)) {
+        super(CharacterCards$Processing(characterCards: null)) {
     on<CharacterCardsEvent>((event, emitter) => switch (event) { CharacterCardsEvent$Load() => _load(event, emitter) });
   }
 
   final ICharacterCardsRepository _characterCardsRepository;
 
   Future<void> _load(CharacterCardsEvent$Load event, Emitter<CharacterCardsState> emitter) async {
-    emitter(CharacterCards$Processing(state.characterCards));
+    emitter(CharacterCards$Processing(characterCards:  state.characterCards));
     try {
-      final characterCards = await _characterCardsRepository.getCharacterCards();
-      emitter(CharacterCards$Idle(UnmodifiableListView(characterCards)));
+      final characterCards = await _characterCardsRepository.getCharacterCards(filters: event.filters);
+      emitter(CharacterCards$Idle(characterCards: UnmodifiableListView(characterCards)));
     } on Object catch (e, s) {
-      emitter(CharacterCards$Error(state.characterCards, error: e));
+      emitter(CharacterCards$Error(characterCards:  state.characterCards, error: e));
       onError(e, s);
     }
   }

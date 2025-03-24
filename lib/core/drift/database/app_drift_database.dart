@@ -8,7 +8,7 @@ part 'app_drift_database.g.dart';
 const _databaseName = 'rick_and_morty_db';
 
 @DriftDatabase(tables: [FavoriteTable])
-class AppDriftDatabase extends _$AppDriftDatabase{
+class AppDriftDatabase extends _$AppDriftDatabase {
   AppDriftDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override

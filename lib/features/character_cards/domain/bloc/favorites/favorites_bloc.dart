@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/features/character_cards/domain/model/character_card.dart';
+import 'package:rick_and_morty/features/character_cards/domain/model/filters_enum.dart';
 import 'package:rick_and_morty/features/character_cards/domain/repository/i_character_cards_repository.dart';
 
 part 'favorites_event.dart';
@@ -25,7 +26,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   Future<void> _load(FavoritesEvent$Load event, Emitter<FavoritesState> emitter) async {
     emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
     try {
-      final favoritesCards = await _characterCardsRepository.getFavorites();
+      final favoritesCards = await _characterCardsRepository.getFavorites(filters: event.filters);
       emitter(FavoritesState$Idle(favoritesCharacters: UnmodifiableListView(favoritesCards)));
     } on Object catch (e, s) {
       emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));

@@ -4,7 +4,7 @@ part of 'character_cards_bloc.dart';
 sealed class CharacterCardsEvent {}
 
 class CharacterCardsEvent$Load extends CharacterCardsEvent {
-  final List<Filter> filters;
+  final List<FilterEnum> filters;
 
   CharacterCardsEvent$Load({required this.filters});
 }

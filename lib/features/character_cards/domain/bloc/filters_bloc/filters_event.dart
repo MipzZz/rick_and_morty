@@ -4,7 +4,8 @@ part of 'filters_bloc.dart';
 sealed class FiltersEvent {}
 
 class FiltersEvent$Change extends FiltersEvent {
-  final List<Filter> filters;
+  final FilterEnum filter;
+  final bool isSelected;
 
-  FiltersEvent$Change(this.filters);
+  FiltersEvent$Change({required this.filter, required this.isSelected});
 }
