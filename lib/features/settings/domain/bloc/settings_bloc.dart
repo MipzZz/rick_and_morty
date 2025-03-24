@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/features/app/model/app_theme.dart';

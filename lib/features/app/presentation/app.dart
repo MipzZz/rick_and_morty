@@ -28,7 +28,7 @@ class App extends StatelessWidget {
           BlocProvider<CharacterCardsBloc>(
             create: (context) {
               return CharacterCardsBloc(characterCardsRepository: dependencies.characterCardsRepository)
-                ..add(CharacterCardsEvent$Load());
+                ..add(CharacterCardsEvent$Load(filters: []));
             },
           ),
           BlocProvider(

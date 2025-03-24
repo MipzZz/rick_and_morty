@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// TODO(MipZ): Добить фильтры
 /// {@template FiltersPanel.class}
 /// FiltersPanel widget.
 /// {@endtemplate}

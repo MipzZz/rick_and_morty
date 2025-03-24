@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/features/character_cards/domain/model/character_card.dart';
+import 'package:rick_and_morty/features/character_cards/domain/model/filters_enum.dart';
 import 'package:rick_and_morty/features/character_cards/presentation/widget/card_tile.dart';
 import 'package:rick_and_morty/features/character_cards/presentation/widget/filters_panel.dart';
 
@@ -10,9 +11,10 @@ import 'package:rick_and_morty/features/character_cards/presentation/widget/filt
 /// {@endtemplate}
 class CardsGrid extends StatelessWidget {
   /// {@macro CardsGrid.class}
-  const CardsGrid({super.key, required this.characterCards});
+  const CardsGrid({super.key, required this.characterCards, required this.filters});
 
   final UnmodifiableListView<CharacterCard>? characterCards;
+  final List<Filter> filters;
 
   static const _fallbackWidth = 160.0;
   static const _fallbackHeight = 270.0;

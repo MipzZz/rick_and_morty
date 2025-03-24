@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/features/character_cards/domain/bloc/favorites/favorites_bloc.dart';
+import 'package:rick_and_morty/features/character_cards/domain/bloc/filters_bloc/filters_bloc.dart';
 import 'package:rick_and_morty/features/character_cards/presentation/widget/cards_grid.dart';
 
 /// {@template FavoritesView.class}
@@ -17,18 +18,26 @@ class FavoritesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => _loadFavorites(context),
-      child: ColoredBox(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: BlocBuilder<FavoritesBloc, FavoritesState>(
-          builder: (context, state) => switch (state) {
-            FavoritesState$Processing() => Center(child: CircularProgressIndicator()),
-            FavoritesState$Error(:final error) => Center(child: Text(error.toString())),
-            FavoritesState$Idle(:final favoritesCharacters) when favoritesCharacters?.isEmpty ?? false =>
-              const Center(child: Text('You have no favorite cards')),
-            FavoritesState$Idle(:final favoritesCharacters) => CardsGrid(characterCards: favoritesCharacters,),
-          },
+    return BlocProvider(
+      create: (context) => FiltersBloc(),
+      child: RefreshIndicator(
+        onRefresh: () => _loadFavorites(context),
+        child: ColoredBox(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: BlocBuilder<FavoritesBloc, FavoritesState>(
+            builder: (context, state) => switch (state) {
+              FavoritesState$Processing() => Center(child: CircularProgressIndicator()),
+              FavoritesState$Error(:final error) => Center(child: Text(error.toString())),
+              FavoritesState$Idle(:final favoritesCharacters) => BlocBuilder<FiltersBloc, FiltersState>(
+                  builder: (context, filtersState) {
+                    return CardsGrid(
+                      filters: filtersState.filters,
+                      characterCards: favoritesCharacters,
+                    );
+                  },
+                ),
+            },
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/features/character_cards/domain/model/character_card.dart';
+import 'package:rick_and_morty/features/character_cards/domain/model/filters_enum.dart';
 import 'package:rick_and_morty/features/character_cards/domain/repository/i_character_cards_repository.dart';
 
 part 'character_cards_event.dart';
