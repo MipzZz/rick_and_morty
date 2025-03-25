@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 
 import 'package:rick_and_morty/core/common/bloc/app_bloc_observer.dart';
+import 'package:rick_and_morty/core/common/bloc/bloc_transformer.dart';
 import 'package:rick_and_morty/features/app/presentation/app.dart';
 import 'package:rick_and_morty/features/init/logic/composition_root.dart';
 
@@ -15,6 +16,7 @@ final class AppRunner {
     final binding = WidgetsFlutterBinding.ensureInitialized()..deferFirstFrame();
 
     Bloc.observer = AppBlocObserver();
+    Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
 
     final composeRoot = CompositionRoot();
 

@@ -38,7 +38,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
     try {
       await _characterCardsRepository.saveToFavorites(event.characterCard);
-      final updatedFavorites = UnmodifiableListView([...state.favoritesCharacters!, event.characterCard]);
+      final UnmodifiableListView<CharacterCard> updatedFavorites =
+          UnmodifiableListView([...(state.favoritesCharacters ?? []), event.characterCard]);
       emitter(FavoritesState$Idle(favoritesCharacters: updatedFavorites));
     } on Object catch (e, s) {
       emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));
@@ -50,8 +51,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     emitter(FavoritesState$Processing(favoritesCharacters: state.favoritesCharacters));
     try {
       await _characterCardsRepository.removeFromFavorites(event.characterCard);
-      final updatedFavorites =
-          state.favoritesCharacters!.where((element) => element.id != event.characterCard.id).toList();
+      final updatedFavorites = (state.favoritesCharacters ?? <CharacterCard>[]).where(
+        (card) => card.id != event.characterCard.id,
+      );
       emitter(FavoritesState$Idle(favoritesCharacters: UnmodifiableListView(updatedFavorites)));
     } on Object catch (e, s) {
       emitter(FavoritesState$Error(favoritesCharacters: state.favoritesCharacters, error: e));

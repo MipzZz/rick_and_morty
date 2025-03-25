@@ -22,36 +22,41 @@ class FavoritesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FiltersBloc(),
-      child: RefreshIndicator(
-        onRefresh: () => _loadFavorites(context),
-        child: ColoredBox(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                FiltersPanel(),
-                Expanded(
-                  child: BlocBuilder<FavoritesBloc, FavoritesState>(
-                    builder: (context, state) => switch (state) {
-                      FavoritesState$Processing() => Center(child: CircularProgressIndicator()),
-                      FavoritesState$Error(:final error) => Center(child: Text(error.toString())),
-                      FavoritesState$Idle(:final favoritesCharacters) => BlocConsumer<FiltersBloc, FiltersState>(
-                          listener: (_,__) => _loadFavorites(context),
-                          builder: (context, filtersState) {
-                            return SliverCardsGrid(
-                              filters: filtersState.filters,
-                              characterCards: favoritesCharacters,
-                            );
-                          },
-                        ),
-                    },
-                  ),
+      child: Builder(
+        builder: (context) {
+          return RefreshIndicator(
+            onRefresh: () => _loadFavorites(context),
+            child: ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    FiltersPanel(),
+                    Expanded(
+                      child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                        builder: (context, state) => switch (state) {
+                          FavoritesState$Processing() => Center(child: CircularProgressIndicator()),
+                          FavoritesState$Error(:final error) => Center(child: Text(error.toString())),
+                          FavoritesState$Idle(:final favoritesCharacters) => BlocConsumer<FiltersBloc, FiltersState>(
+                              listener: (_,__) => _loadFavorites(context),
+                              builder: (context, filtersState) {
+                                return SliverCardsGrid(
+                                  filters: filtersState.filters,
+                                  isLoadingMoreData: false,
+                                  characterCards: favoritesCharacters,
+                                );
+                              },
+                            ),
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
   }

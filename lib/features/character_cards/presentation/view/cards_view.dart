@@ -13,9 +13,11 @@ class CardsView extends StatelessWidget {
   const CardsView({super.key});
 
   Future<void> _loadCards(BuildContext context, [bool isFilterChanges = false]) async {
+
     final filters = context.read<FiltersBloc>().state.filters;
-    final characterCardsBloc = context.read<CharacterCardsBloc>()
-      ..add(CharacterCardsEvent$Load(offset: isFilterChanges ? 1 : null, filters: filters));
+    final characterCardsBloc = context.read<CharacterCardsBloc>();
+    if (characterCardsBloc.state.offset == null && !isFilterChanges) return;
+    characterCardsBloc.add(CharacterCardsEvent$Load(offset: isFilterChanges ? 1 : characterCardsBloc.state.offset, filters: filters));
     await characterCardsBloc.stream.first;
   }
 
@@ -51,6 +53,7 @@ class CardsView extends StatelessWidget {
                                 },
                                 child: SliverCardsGrid(
                                   filters: filtersState.filters,
+                                  isLoadingMoreData: state.offset != null,
                                   characterCards: state.characterCards,
                                 ),
                               );

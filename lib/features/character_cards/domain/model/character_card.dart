@@ -61,3 +61,21 @@ class CharacterCard {
   @override
   int get hashCode => id.hashCode ^ name.hashCode ^ status.hashCode ^ type.hashCode ^ gender.hashCode ^ image.hashCode;
 }
+
+
+class PaginationCharacterCard {
+  final Iterable<CharacterCard> characterCards;
+  final int offset;
+  PaginationCharacterCard({required this.characterCards, required this.offset});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PaginationCharacterCard &&
+          runtimeType == other.runtimeType &&
+          characterCards == other.characterCards &&
+          offset == other.offset;
+
+  @override
+  int get hashCode => characterCards.hashCode ^ offset.hashCode;
+}

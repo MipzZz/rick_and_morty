@@ -8,7 +8,11 @@ final class CharacterDatasource {
 
   final RestClient _restClient;
 
-  Future<Iterable<CharacterCard>> getCharacterCards({required int? offset, required Iterable<FilterEnum> filters}) async {
+  Future<Iterable<CharacterCard>> getCharacterCards({
+    required int? offset,
+    required Iterable<FilterEnum> filters,
+  }) async {
+    await Future.delayed(Duration(seconds: 5));
     final res = await _restClient.get('/character', queryParams: {
       'status': filters.contains(FilterEnum.onlyAlive) ? 'alive' : null,
       'gender': filters.contains(FilterEnum.onlyWomen) ? 'female' : null,

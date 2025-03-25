@@ -17,7 +17,9 @@ sealed class FavoritesState {
 
   bool isCharacterFavorite(int id) {
     if (favoritesCharacters == null) return false;
-    return favoritesCharacters!.any((element) => element.id == id);
+    final rs = favoritesCharacters!.any((element) => element.id == id);
+    print('character with id $id is ${rs ? 'favorite' : 'not favorite'}');
+    return rs;
   }
 }
 

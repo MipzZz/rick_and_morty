@@ -15,8 +15,10 @@ class CardTile extends StatelessWidget {
   final CharacterCard characterCard;
 
   void _addToFavorites(BuildContext context, bool isFavorite) {
-    if (isFavorite) return context.read<FavoritesBloc>().add(FavoritesEvent$RemoveFromFavorites(characterCard));
-    context.read<FavoritesBloc>().add(FavoritesEvent$SaveToFavorites(characterCard));
+    final favoriteBloc = context.read<FavoritesBloc>();
+    isFavorite
+        ? favoriteBloc.add(FavoritesEvent$RemoveFromFavorites(characterCard))
+        : favoriteBloc.add(FavoritesEvent$SaveToFavorites(characterCard));
   }
 
   @override
@@ -34,12 +36,17 @@ class CardTile extends StatelessWidget {
         children: [
           Stack(
             children: [
-              // TODO(MipZ): Добавить плейсхолдер при загрузке
               _CardNetworkImage(characterCard: characterCard),
               Positioned(
                 right: 0,
                 child: BlocSelector<FavoritesBloc, FavoritesState, bool>(
-                  selector: (state) => state.isCharacterFavorite(characterCard.id),
+                  selector: (state) {
+                    print('fav chars:');
+                    state.favoritesCharacters?.forEach((element) => print(element.id));
+                    print('curr char: ${characterCard.id}');
+                    print('is favorite: ${state.favoritesCharacters?.contains(characterCard)}');
+                    return state.favoritesCharacters?.contains(characterCard) ?? false;
+                  },
                   builder: (context, isFavorite) {
                     return IconButton(
                       onPressed: () => _addToFavorites(context, isFavorite),

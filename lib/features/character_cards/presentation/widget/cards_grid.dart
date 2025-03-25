@@ -13,10 +13,11 @@ const double _fallbackHeight = 270.0;
 /// {@endtemplate}
 class SliverCardsGrid extends StatelessWidget {
   /// {@macro CardsGrid.class}
-  const SliverCardsGrid({super.key, required this.characterCards, required this.filters});
+  const SliverCardsGrid({super.key, required this.characterCards, required this.filters, required this.isLoadingMoreData});
 
   final UnmodifiableListView<CharacterCard>? characterCards;
   final List<FilterEnum> filters;
+  final bool isLoadingMoreData;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,10 @@ class SliverCardsGrid extends StatelessWidget {
           itemCount: characterCards?.length ?? 0,
           itemBuilder: (context, index) => CardTile(characterCard: characterCards![index]),
         ),
+        if (isLoadingMoreData) const SliverToBoxAdapter(child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Center(child: CircularProgressIndicator()),
+        ))
       ],
     );
   }
