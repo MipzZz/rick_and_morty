@@ -1,5 +1,1 @@
-enum StatusEnum {
-  alive,
-  dead,
-  unknown
-}
+enum StatusEnum { alive, dead, unknown }

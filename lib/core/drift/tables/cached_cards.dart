@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
-@DataClassName('Favorite')
-class FavoriteTable extends Table {
+@DataClassName('CachedCard')
+class CachedTable extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
   TextColumn get status => text()();

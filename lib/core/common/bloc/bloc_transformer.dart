@@ -11,4 +11,3 @@ final class SequentialBlocTransformer<Event> extends BlocTransformer<Event> {
   @override
   Stream<Event> transform(Stream<Event> stream, EventMapper<Event> mapper) => stream.asyncExpand(mapper);
 }
-

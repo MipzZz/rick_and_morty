@@ -27,15 +27,27 @@ class CharacterCardsBloc extends Bloc<CharacterCardsEvent, CharacterCardsState> 
       ),
     );
     try {
+      // Загрузка данных из кеша
+      if (state.offset == 1) {
+        final cachedCards = await _characterCardsRepository.getCachedCards();
+        if (cachedCards.isNotEmpty) {
+          emitter(CharacterCards$Processing(characterCards: UnmodifiableListView(cachedCards), offset: state.offset));
+        }
+      }
+
+      // Проверка, что все данные были загружены
       if (state.offset == null) {
         return emitter(CharacterCards$Idle(characterCards: state.characterCards, offset: state.offset));
       }
+
       final characterCardsChunk = await _characterCardsRepository.getCharacterCards(
         offset: event.offset,
         filters: event.filters,
       );
+      // TODO(MipZ): Добавить глубокую проверку
+      final bool needUpdate = state.characterCards != characterCardsChunk;
       final UnmodifiableListView<CharacterCard> newCardsList = UnmodifiableListView(
-        [...(state.characterCards ?? []), ...characterCardsChunk],
+        [...(state.characterCards ?? []), ...(needUpdate ? characterCardsChunk : [])],
       );
       emitter(CharacterCards$Idle(
         characterCards: newCardsList,

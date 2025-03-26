@@ -5,19 +5,29 @@ import 'package:rick_and_morty/features/character_cards/domain/model/filters_enu
 final class CharacterLocalDatasource {
   CharacterLocalDatasource(this.driftClient);
 
-  final DriftClient driftClient;
+  final IDriftClient driftClient;
 
-  Future<Iterable<CharacterCard>> getFavoritesCards({required Iterable<FilterEnum> filters}) async{
+  Future<Iterable<CharacterCard>> getFavoritesCards({required Iterable<FilterEnum> filters}) async {
     final res = await driftClient.getFavoritesCards(filters: filters);
-    final characterFavoriteCards = res.map(CharacterCard.fromFavorites);
+    final Iterable<CharacterCard> characterFavoriteCards = res.map(CharacterCard.fromFavorites);
     return characterFavoriteCards;
   }
 
-  Future<void> saveToFavorites(CharacterCard characterCard) async{
+  Future<void> cacheCharacterCards({required Iterable<CharacterCard> characterCards}) async {
+    await driftClient.saveCardsToCache(cards: characterCards.map((card) => card.toCached()));
+  }
+
+  Future<Iterable<CharacterCard>> getCachedCharacterCards() async {
+    final res = await driftClient.getCachedCharacterCards();
+    final characterFavoriteCards = res.map(CharacterCard.fromCachedCard);
+    return characterFavoriteCards;
+  }
+
+  Future<void> saveToFavorites(CharacterCard characterCard) async {
     await driftClient.saveToFavorites(characterCard.toFavorites());
   }
 
-  Future<void> removeFromFavorites(CharacterCard characterCard) async{
+  Future<void> removeFromFavorites(CharacterCard characterCard) async {
     await driftClient.removeFromFavorites(characterCard.toFavorites());
   }
 }

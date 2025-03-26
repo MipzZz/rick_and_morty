@@ -40,13 +40,7 @@ class CardTile extends StatelessWidget {
               Positioned(
                 right: 0,
                 child: BlocSelector<FavoritesBloc, FavoritesState, bool>(
-                  selector: (state) {
-                    print('fav chars:');
-                    state.favoritesCharacters?.forEach((element) => print(element.id));
-                    print('curr char: ${characterCard.id}');
-                    print('is favorite: ${state.favoritesCharacters?.contains(characterCard)}');
-                    return state.favoritesCharacters?.contains(characterCard) ?? false;
-                  },
+                  selector: (state) => state.favoritesCharacters?.contains(characterCard) ?? false,
                   builder: (context, isFavorite) {
                     return IconButton(
                       onPressed: () => _addToFavorites(context, isFavorite),
@@ -58,36 +52,28 @@ class CardTile extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2)],
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2)],
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          characterCard.status,
+                          style: Theme.of(context).textTheme.bodyMedium?.apply(fontWeightDelta: 3, color: Colors.white),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            characterCard.status,
-                            style:
-                                Theme.of(context).textTheme.bodyMedium?.apply(fontWeightDelta: 3, color: Colors.white),
-                          ),
-                          // Text(
-                          //   characterCard.gender,
-                          //   style: Theme.of(context).textTheme.bodyMedium?.apply(fontWeightDelta: 2, color: Colors.white),
-                          // ),
-                          // Text(
-                          //   characterCard.status,
-                          //   style: Theme.of(context).textTheme.bodyMedium?.apply(fontWeightDelta: 2, color: Colors.white),
-                          // ),
-                        ],
-                      ),
-                    ),
-                  ))
+                  ),
+                ),
+              )
             ],
           ),
           Expanded(
@@ -117,6 +103,7 @@ class _CardNetworkImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(8.0),
       child: Image.network(
         characterCard.image,
+        errorBuilder: (context, error, stackTrace) => SizedBox(width: _imageSize, height: _imageSize, child: const Icon(Icons.person)),
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;

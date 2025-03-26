@@ -1,13 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rick_and_morty/core/drift/tables/cached_cards.dart';
 import 'package:rick_and_morty/core/drift/tables/favorite_table.dart';
 
 part 'app_drift_database.g.dart';
 
 const _databaseName = 'rick_and_morty_db';
 
-@DriftDatabase(tables: [FavoriteTable])
+@DriftDatabase(tables: [FavoriteTable, CachedTable])
 class AppDriftDatabase extends _$AppDriftDatabase {
   AppDriftDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 

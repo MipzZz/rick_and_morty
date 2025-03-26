@@ -13,11 +13,11 @@ class CardsView extends StatelessWidget {
   const CardsView({super.key});
 
   Future<void> _loadCards(BuildContext context, [bool isFilterChanges = false]) async {
-
     final filters = context.read<FiltersBloc>().state.filters;
     final characterCardsBloc = context.read<CharacterCardsBloc>();
     if (characterCardsBloc.state.offset == null && !isFilterChanges) return;
-    characterCardsBloc.add(CharacterCardsEvent$Load(offset: isFilterChanges ? 1 : characterCardsBloc.state.offset, filters: filters));
+    characterCardsBloc
+        .add(CharacterCardsEvent$Load(offset: isFilterChanges ? 1 : characterCardsBloc.state.offset, filters: filters));
     await characterCardsBloc.stream.first;
   }
 
@@ -40,7 +40,7 @@ class CardsView extends StatelessWidget {
                       builder: (context, state) => switch (state) {
                         CharacterCards$Processing(:final characterCards) when (characterCards?.isEmpty ?? true) =>
                           Center(child: CircularProgressIndicator()),
-                        CharacterCards$Error(:final error) => Center(child: Text(error.toString())),
+                        CharacterCards$Error(:final characterCards, :final error) when (characterCards?.isEmpty ?? true) => Center(child: Text(error.toString())),
                         _ => BlocConsumer<FiltersBloc, FiltersState>(
                             listener: (_, __) => _loadCards(context, true),
                             builder: (context, filtersState) {

@@ -83,13 +83,13 @@ Future<RestClient> createRestClient() async {
   return RestClientDio(dio: dioClient);
 }
 
-Future<DriftClient> createDriftClient() async {
+Future<IDriftClient> createDriftClient() async {
   final driftDatabase = AppDriftDatabase();
   return DriftClientImpl(database: driftDatabase);
 }
 
 Future<ICharacterCardsRepository> createCharacterCardsRepository(
-    {required RestClient restClient, required DriftClient driftClient}) async {
+    {required RestClient restClient, required IDriftClient driftClient}) async {
   final characterDatasource = CharacterDatasource(restClient);
   final characterLocalDatasource = CharacterLocalDatasource(driftClient);
 

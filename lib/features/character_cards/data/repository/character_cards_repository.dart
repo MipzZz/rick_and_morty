@@ -20,7 +20,8 @@ final class CharacterCardsRepository implements ICharacterCardsRepository {
     required Iterable<FilterEnum> filters,
   }) async {
     final characterCards = await _characterDatasource.getCharacterCards(offset: offset, filters: filters);
-
+    // Сохраняем только первую страницу
+    if (offset == 1) await _characterLocalDatasource.cacheCharacterCards(characterCards: characterCards);
     return characterCards;
   }
 
@@ -39,5 +40,16 @@ final class CharacterCardsRepository implements ICharacterCardsRepository {
   @override
   Future<void> removeFromFavorites(CharacterCard characterCard) async {
     await _characterLocalDatasource.removeFromFavorites(characterCard);
+  }
+
+  @override
+  Future<void> saveCardsToCache({required Iterable<CharacterCard> characterCards}) async {
+    await _characterLocalDatasource.cacheCharacterCards(characterCards: characterCards);
+  }
+
+  @override
+  Future<Iterable<CharacterCard>> getCachedCards() async {
+    final cachedCharacterCards = await _characterLocalDatasource.getCachedCharacterCards();
+    return cachedCharacterCards;
   }
 }

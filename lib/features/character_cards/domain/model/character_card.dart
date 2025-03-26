@@ -20,7 +20,7 @@ class CharacterCard {
     required this.image,
   });
 
-  factory CharacterCard.fromFavorites(Favorites favorite) {
+  factory CharacterCard.fromFavorites(Favorite favorite) {
     return CharacterCard(
         id: favorite.id,
         name: favorite.name,
@@ -30,7 +30,19 @@ class CharacterCard {
         image: favorite.image);
   }
 
-  Favorites toFavorites() => Favorites(id: id, name: name, status: status, type: type, gender: gender, image: image);
+  Favorite toFavorites() => Favorite(id: id, name: name, status: status, type: type, gender: gender, image: image);
+
+  factory CharacterCard.fromCachedCard(CachedCard favorite) {
+    return CharacterCard(
+        id: favorite.id,
+        name: favorite.name,
+        status: favorite.status,
+        type: favorite.type,
+        gender: favorite.gender,
+        image: favorite.image);
+  }
+
+  CachedCard toCached() => CachedCard(id: id, name: name, status: status, type: type, gender: gender, image: image);
 
   factory CharacterCard.fromJson(JsonMap json) {
     return CharacterCard(
@@ -61,7 +73,6 @@ class CharacterCard {
   @override
   int get hashCode => id.hashCode ^ name.hashCode ^ status.hashCode ^ type.hashCode ^ gender.hashCode ^ image.hashCode;
 }
-
 
 class PaginationCharacterCard {
   final Iterable<CharacterCard> characterCards;

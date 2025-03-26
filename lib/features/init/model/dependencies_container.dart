@@ -20,6 +20,6 @@ class DependenciesContainer {
   /// [AppSettingsBloc] instance, used to manage theme.
   final SettingsBloc settingsBloc;
   final RestClient restClient;
-  final DriftClient driftClient;
+  final IDriftClient driftClient;
   final ICharacterCardsRepository characterCardsRepository;
 }

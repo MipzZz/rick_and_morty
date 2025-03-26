@@ -12,8 +12,8 @@ sealed class FavoritesState {
   const factory FavoritesState.processing({required UnmodifiableListView<CharacterCard> favoritesCharacters}) =
       FavoritesState$Processing;
 
-  const factory FavoritesState.error({required UnmodifiableListView<CharacterCard> favoritesCharacters, required Object error}) =
-      FavoritesState$Error;
+  const factory FavoritesState.error(
+      {required UnmodifiableListView<CharacterCard> favoritesCharacters, required Object error}) = FavoritesState$Error;
 
   bool isCharacterFavorite(int id) {
     if (favoritesCharacters == null) return false;
